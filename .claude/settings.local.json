@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path 'c:\\\\Users\\\\turka\\\\source\\\\repos\\\\Kurumsal\\\\Türkkep\\\\Dev with Claude Code\\\\project' -Force)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(dotnet new *)",
+      "Bash(dotnet build *)",
+      "Bash(Start-Process -NoNewWindow -FilePath \"dotnet\" -ArgumentList \"run --project api/ --launch-profile http\" -PassThru)",
+      "Bash(Select-Object -ExpandProperty Id)",
+      "Bash(curl -s http://localhost:5015/customers)",
+      "Bash(python3 -m json.tool)",
+      "Bash(kill 1219)",
+      "Bash(pkill -f \"dotnet run --project api\")",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(pkill -f \"dotnet run\")",
+      "Bash(pkill -f \"Api.exe\")",
+      "Bash(ng version *)",
+      "Bash(ng new *)",
+      "Bash(ng build *)"
+    ]
+  }
+}
