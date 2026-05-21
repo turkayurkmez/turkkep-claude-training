@@ -15,7 +15,8 @@ public class CustomerRepository : IRepository<Customer>
 
     public async Task<PagedResult<Customer>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken)
     {
-        await Task.CompletedTask;
+        await Task.Yield();
+        cancellationToken.ThrowIfCancellationRequested();
         var items = _customers
             .Skip((query.Page - 1) * query.PageSize)
             .Take(query.PageSize);
