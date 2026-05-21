@@ -73,6 +73,7 @@ Never modify:
 
 ### Girdi Doğrulama
 - Tüm model property'lerine uygun data annotation ekle: string alanlar için `[StringLength]`, e-posta için `[EmailAddress]`, sayısal aralıklar için `[Range]`.
+- Uygun olan tüm validasyonlar için FluentValidation kullan; özellikle karmaşık doğrulama kuralları veya cross-field validasyon gerektiren durumlarda.
 - Sayfalama parametrelerinde her zaman hem alt hem üst sınır uygula; `Math.Clamp(value, min, max)` kullan.
 
 ### Hata Yönetimi ve Bilgi Sızıntısı
