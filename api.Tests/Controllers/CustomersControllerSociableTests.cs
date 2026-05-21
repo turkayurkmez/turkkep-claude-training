@@ -46,6 +46,39 @@ public class CustomersControllerSociableTests
         await act.Should().ThrowAsync<OperationCanceledException>();
     }
 
+    [Fact]
+    public async Task GetById_ReturnsCorrectCustomer_ForEachId()
+    {
+        var result1 = await _sut.GetById(1, CancellationToken.None);
+        result1.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().BeOfType<Customer>()
+            .Which.Name.Should().Be("Ahmet Yılmaz");
+
+        var result2 = await _sut.GetById(2, CancellationToken.None);
+        result2.Result.Should().BeOfType<OkObjectResult>()
+            .Which.Value.Should().BeOfType<Customer>()
+            .Which.Name.Should().Be("Ayşe Kaya");
+    }
+
+    [Fact]
+    public async Task GetById_PropagatesCancellation_WhenTokenAlreadyCancelled()
+    {
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        var act = () => _sut.GetById(1, cts.Token);
+
+        await act.Should().ThrowAsync<OperationCanceledException>();
+    }
+
+    [Fact]
+    public async Task GetById_NonExistentId_ReturnsNotFound()
+    {
+        var result = await _sut.GetById(999, CancellationToken.None);
+
+        result.Result.Should().BeOfType<NotFoundResult>();
+    }
+
     [Theory]
     [InlineData(1, 2, "Ahmet Yılmaz", "Ayşe Kaya")]
     [InlineData(2, 2, "Mehmet Demir")]

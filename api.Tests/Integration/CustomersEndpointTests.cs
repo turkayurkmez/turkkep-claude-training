@@ -69,6 +69,31 @@ public class CustomersEndpointTests(WebApplicationFactory<Program> factory)
             .And.Contain(c => c.Name == "Mehmet Demir");
     }
 
+    // --- GET /customers/{id} testleri ---
+
+    [Theory]
+    [InlineData(1, "Ahmet Yılmaz")]
+    [InlineData(2, "Ayşe Kaya")]
+    [InlineData(3, "Mehmet Demir")]
+    public async Task GetById_ExistingId_Returns200WithMatchingCustomer(
+        int id, string expectedName)
+    {
+        var customer = await _client.GetFromJsonAsync<Customer>(
+            $"/customers/{id}",
+            new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+        customer!.Id.Should().Be(id);
+        customer.Name.Should().Be(expectedName);
+    }
+
+    [Fact]
+    public async Task GetById_NonExistentId_Returns404()
+    {
+        var response = await _client.GetAsync("/customers/999");
+
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
     public static TheoryData<int, int, string[]> PaginationCases => new()
     {
         { 1, 2,  ["Ahmet Yılmaz", "Ayşe Kaya"] },

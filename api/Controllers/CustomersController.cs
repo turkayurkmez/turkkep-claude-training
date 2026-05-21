@@ -12,4 +12,12 @@ public class CustomersController(ICustomerService customerService) : ControllerB
     public async Task<ActionResult<PagedResult<Customer>>> Get(
         [FromQuery] PagedQuery query, CancellationToken cancellationToken)
         => Ok(await customerService.GetPagedAsync(query, cancellationToken));
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Customer>> GetById(
+        int id, CancellationToken cancellationToken)
+    {
+        var customer = await customerService.GetByIdAsync(id, cancellationToken);
+        return customer is null ? NotFound() : Ok(customer);
+    }
 }

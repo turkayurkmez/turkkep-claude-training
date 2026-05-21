@@ -54,4 +54,37 @@ public class CustomerServiceTests
 
         await _repository.Received(1).GetPagedAsync(Arg.Any<PagedQuery>(), cts.Token);
     }
+
+    [Fact]
+    public async Task GetByIdAsync_ReturnsRepositoryResult()
+    {
+        var expected = new Customer { Id = 2, Name = "Ayşe Kaya", Email = "ayse@example.com" };
+        _repository.GetByIdAsync(2, Arg.Any<CancellationToken>()).Returns(expected);
+
+        var result = await _sut.GetByIdAsync(2, CancellationToken.None);
+
+        result.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_ReturnsNull_WhenRepositoryReturnsNull()
+    {
+        _repository.GetByIdAsync(999, Arg.Any<CancellationToken>()).Returns((Customer?)null);
+
+        var result = await _sut.GetByIdAsync(999, CancellationToken.None);
+
+        result.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_PassesCancellationTokenToRepository()
+    {
+        using var cts = new CancellationTokenSource();
+        _repository.GetByIdAsync(default, default).ReturnsForAnyArgs((Customer?)null);
+
+        await _sut.GetByIdAsync(1, cts.Token);
+
+        // Arg.Any<CancellationToken>() değil — kesin token eşleşmesi zorunlu
+        await _repository.Received(1).GetByIdAsync(1, cts.Token);
+    }
 }
