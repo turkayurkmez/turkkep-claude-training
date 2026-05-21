@@ -13,6 +13,13 @@ public class CustomerRepository : IRepository<Customer>
 
     public IEnumerable<Customer> GetAll() => _customers;
 
+    public async Task<Customer?> GetByIdAsync(int id, CancellationToken cancellationToken)
+    {
+        await Task.Yield();
+        cancellationToken.ThrowIfCancellationRequested();
+        return _customers.FirstOrDefault(c => c.Id == id);
+    }
+
     public async Task<PagedResult<Customer>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken)
     {
         await Task.Yield();
